@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
@@ -63,6 +63,39 @@ const DEFAULT_PROJECTS: Project[] = [
   },
 ];
 
+function ProjectImage({
+  src,
+  alt,
+  className,
+  fallbackSrc,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  fallbackSrc: string;
+}) {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  useEffect(() => {
+    setImgSrc(src);
+  }, [src]);
+
+  return (
+    <Image
+      src={imgSrc}
+      alt={alt}
+      fill
+      sizes="(max-width: 768px) 100vw, 50vw"
+      className={className}
+      onError={() => {
+        if (imgSrc !== fallbackSrc) {
+          setImgSrc(fallbackSrc);
+        }
+      }}
+    />
+  );
+}
+
 export default function HorizontalGallery({
   projects = DEFAULT_PROJECTS,
 }: {
@@ -78,12 +111,18 @@ export default function HorizontalGallery({
       const containerEl = containerRef.current;
       if (!scrollEl || !containerEl) return;
 
-      // Calculate how far horizontally we need to translate the slider
-      // total width of the scroll element minus the screen width
       const getScrollAmount = () => {
         const scrollWidth = scrollEl.scrollWidth;
         const viewportWidth = window.innerWidth;
-        return -(scrollWidth - viewportWidth);
+        const distance = scrollWidth - viewportWidth;
+        return distance > 0 ? -distance : 0;
+      };
+
+      const getEndDistance = () => {
+        const scrollWidth = scrollEl.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        const distance = scrollWidth - viewportWidth;
+        return distance > 0 ? distance : window.innerWidth;
       };
 
       const scrollTween = gsap.fromTo(
@@ -95,16 +134,18 @@ export default function HorizontalGallery({
           scrollTrigger: {
             trigger: containerEl,
             pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
             scrub: 1,
             start: "top top",
-            end: () => `+=${scrollEl.scrollWidth - window.innerWidth}`,
-            invalidateOnRefresh: true, // Recalculates on screen resizing
+            end: () => `+=${getEndDistance()}`,
+            invalidateOnRefresh: true,
           },
         },
       );
 
       // Add a subtle parallax effect to the project images inside the horizontal scroll
-      gsap.utils.toArray(".gallery-img").forEach((img: any) => {
+      gsap.utils.toArray<HTMLElement>(".gallery-img").forEach((img) => {
         gsap.fromTo(
           img,
           { x: "-10%" },
@@ -113,7 +154,7 @@ export default function HorizontalGallery({
             ease: "none",
             scrollTrigger: {
               trigger: img,
-              containerAnimation: scrollTween, // Binds this tween to the horizontal scroll timeline!
+              containerAnimation: scrollTween,
               start: "left right",
               end: "right left",
               scrub: true,
@@ -122,11 +163,14 @@ export default function HorizontalGallery({
         );
       });
 
-      return () => {
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
+      // Refresh ScrollTrigger after a slight delay to ensure images & layout have measured correctly
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 300);
+
+      return () => clearTimeout(timer);
     },
-    { scope: containerRef },
+    { scope: containerRef, dependencies: [projects] },
   );
 
   return (
@@ -163,41 +207,43 @@ export default function HorizontalGallery({
         </div>
 
         {/* Project Slides */}
-        {projects.map((project, idx) => (
-          <div
-            key={project.id}
-            onClick={() => setSelectedProject(project)}
-            data-cursor="view"
-            data-cursor-text="PREVIEW"
-            className="w-[45vw] min-w-[400px] md:w-[35vw] aspect-[3/2] relative group rounded-lg overflow-hidden shrink-0 bg-muted cursor-pointer border border-border/20 transition-all duration-300 hover:border-primary/40"
-          >
-            {/* Project Image with parallax class */}
-            <div className="relative w-full h-full scale-110 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.14]">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="gallery-img object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
-            </div>
+        {projects.map((project, idx) => {
+          const fallback = `/project_${(idx % 3) + 1}.jpg`;
+          return (
+            <div
+              key={project.id}
+              onClick={() => setSelectedProject(project)}
+              data-cursor="view"
+              data-cursor-text="PREVIEW"
+              className="w-[45vw] min-w-[400px] md:w-[35vw] aspect-[3/2] relative group rounded-lg overflow-hidden shrink-0 bg-muted cursor-pointer border border-border/20 transition-all duration-300 hover:border-primary/40"
+            >
+              {/* Project Image with parallax class */}
+              <div className="relative w-full h-full scale-110 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.14]">
+                <ProjectImage
+                  src={project.image}
+                  alt={project.title}
+                  fallbackSrc={fallback}
+                  className="gallery-img object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300" />
+              </div>
 
-            {/* Project Floating Meta */}
-            <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10 text-foreground pointer-events-none">
-              <span className="text-xs font-semibold tracking-wider text-primary uppercase mb-2 block">
-                {project.category}
-              </span>
-              <h4 className="font-syne text-2xl md:text-3xl font-bold uppercase tracking-tight">
-                {project.title}
-              </h4>
-            </div>
+              {/* Project Floating Meta */}
+              <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10 text-foreground pointer-events-none">
+                <span className="text-xs font-semibold tracking-wider text-primary uppercase mb-2 block">
+                  {project.category}
+                </span>
+                <h4 className="font-syne text-2xl md:text-3xl font-bold uppercase tracking-tight">
+                  {project.title}
+                </h4>
+              </div>
 
-            <div className="absolute top-6 right-6 md:top-8 md:right-8 bg-background/80 backdrop-blur-md border border-border/30 rounded-full px-3 py-1 text-[10px] font-bold tracking-widest text-primary">
-              {project.year}
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 bg-background/80 backdrop-blur-md border border-border/30 rounded-full px-3 py-1 text-[10px] font-bold tracking-widest text-primary">
+                {project.year}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Outro Slide */}
         <div className="w-auto max-w-sm md:max-w-md flex flex-col justify-center shrink-0">
@@ -232,10 +278,10 @@ export default function HorizontalGallery({
           {selectedProject && (
             <>
               <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden mb-6 bg-muted border border-border/10">
-                <Image
+                <ProjectImage
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  fill
+                  fallbackSrc="/project_1.jpg"
                   className="object-cover"
                 />
               </div>

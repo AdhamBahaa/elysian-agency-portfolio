@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Plus, Minus } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface ServiceItem {
   id: number;
@@ -62,11 +65,15 @@ export default function Services() {
         if (json?.data && json.data.length > 0) {
           const fetchedServices: ServiceItem[] = json.data.map((item: any, idx: number) => ({
             id: item.id || idx + 1,
-            title: item.title,
-            shortDesc: item.shortDesc,
-            longDesc: item.longDesc,
-            price: item.price,
-            deliverables: Array.isArray(item.deliverables) ? item.deliverables : [],
+            title: item.title || item.attributes?.title || "",
+            shortDesc: item.shortDesc || item.attributes?.shortDesc || "",
+            longDesc: item.longDesc || item.attributes?.longDesc || "",
+            price: item.price || item.attributes?.price || "",
+            deliverables: Array.isArray(item.deliverables)
+              ? item.deliverables
+              : Array.isArray(item.attributes?.deliverables)
+              ? item.attributes.deliverables
+              : [],
           }));
           setServices(fetchedServices);
         }
@@ -90,12 +97,12 @@ export default function Services() {
         opacity: 0,
         duration: 0.4,
         ease: "power2.out",
+        onComplete: () => ScrollTrigger.refresh(),
       });
     }
 
     // 2. Open clicked item
     if (isOpening && currentRef) {
-      // Temporarily set height to auto to measure scrollHeight
       gsap.fromTo(
         currentRef,
         { height: 0, opacity: 0 },
@@ -104,6 +111,7 @@ export default function Services() {
           opacity: 1,
           duration: 0.5,
           ease: "power3.out",
+          onComplete: () => ScrollTrigger.refresh(),
         }
       );
       setActiveIndex(index);
@@ -113,14 +121,14 @@ export default function Services() {
   };
 
   return (
-    <section id="services" className="py-32 px-6 md:px-12 max-w-6xl mx-auto border-t border-border/20">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <section id="services" className="relative z-10 bg-background py-32 px-6 md:px-12 max-w-7xl mx-auto border-t border-border/20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
         {/* Sticky Left Sidebar Title */}
-        <div className="lg:sticky lg:top-32 self-start flex flex-col gap-4">
+        <div className="lg:col-span-5 lg:sticky lg:top-32 self-start flex flex-col gap-4 lg:pr-4">
           <span className="text-xs uppercase tracking-widest text-primary font-bold">
             What We Do
           </span>
-          <h2 className="font-syne text-4xl md:text-5xl font-extrabold uppercase leading-tight">
+          <h2 className="font-syne text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-extrabold uppercase leading-tight tracking-tight break-words">
             OUR BRAND CAPABILITIES
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mt-2">
@@ -129,7 +137,7 @@ export default function Services() {
         </div>
 
         {/* Custom GSAP Accordion List */}
-        <div className="lg:col-span-2 flex flex-col">
+        <div className="lg:col-span-7 flex flex-col">
           {services.map((service, index) => {
             const isOpen = activeIndex === index;
 
