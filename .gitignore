@@ -1,0 +1,31 @@
+# Node dependencies
+node_modules/
+**/node_modules/
+
+# Next.js build output
+.next/
+**/_next/
+**/out/
+**/build/
+
+# Strapi local databases & build caches
+.cache/
+**/dist/
+**/.tmp/
+**/database/data.db
+**/database/data.db-journal
+**/database/data.db-shm
+**/database/data.db-wal
+**/public/uploads/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/.env*
+
+# System files
+.DS_Store
+Thumbs.db
