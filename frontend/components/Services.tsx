@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Plus, Minus } from "lucide-react";
 
@@ -49,8 +49,34 @@ const SERVICES_DATA: ServiceItem[] = [
 ];
 
 export default function Services() {
+  const [services, setServices] = useState<ServiceItem[]>(SERVICES_DATA);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    async function fetchServices() {
+      try {
+        const res = await fetch("http://localhost:1337/api/services?sort=order:asc");
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json?.data && json.data.length > 0) {
+          const fetchedServices: ServiceItem[] = json.data.map((item: any, idx: number) => ({
+            id: item.id || idx + 1,
+            title: item.title,
+            shortDesc: item.shortDesc,
+            longDesc: item.longDesc,
+            price: item.price,
+            deliverables: Array.isArray(item.deliverables) ? item.deliverables : [],
+          }));
+          setServices(fetchedServices);
+        }
+      } catch {
+        // Fallback to SERVICES_DATA if Strapi API is offline
+      }
+    }
+
+    fetchServices();
+  }, []);
 
   const toggleAccordion = (index: number) => {
     const isOpening = activeIndex !== index;
@@ -104,7 +130,7 @@ export default function Services() {
 
         {/* Custom GSAP Accordion List */}
         <div className="lg:col-span-2 flex flex-col">
-          {SERVICES_DATA.map((service, index) => {
+          {services.map((service, index) => {
             const isOpen = activeIndex === index;
 
             return (
