@@ -24,18 +24,35 @@ Elysian Agency is a high-fidelity, interactive practice project showcasing a cre
 1. **Custom Follower Cursor** ([CustomCursor.tsx](frontend/components/CustomCursor.tsx)):
    - Optimized pointer tracking using GSAP `quickTo`.
    - Adapts dynamically to hover targets: scales up and inverts text colors over headers, morphs into a gold `"PREVIEW"` tag over project cards, and scales boundaries on clickable links.
+   
+   ![Custom Cursor Follower Demo](docs/custom-cursor.gif)
+
 2. **Lenis & GSAP Sync** ([SmoothScroll.tsx](frontend/components/SmoothScroll.tsx)):
    - Hooks Lenis scroll frames into the GSAP global ticker, preventing animation frame lag and ensuring ScrollTriggers evaluate in absolute lockstep.
+   
+   ![Smooth Scroll Integration Demo](docs/smooth-scroll.gif)
+
 3. **Elastic Magnetic Buttons** ([Magnetic.tsx](frontend/components/Magnetic.tsx)):
    - Calculates cursor offsets to pull buttons and navigation links toward the pointer on hover with customizable spring physics.
+   
+   ![Magnetic Hover Demo](docs/magnetic-hover.gif)
+
 4. **Horizontal Pin-Scroll Showcase** ([HorizontalGallery.tsx](frontend/components/HorizontalGallery.tsx)):
    - Pins the vertical viewport scroll and translates a project card row horizontally.
    - Leverages a **Shadcn UI Dialog** component to overlay custom project quick-views.
+   
+   ![Horizontal Pin Scroll Demo](docs/horizontal-scroll.gif)
+
 5. **Layout Shift-Free Accordion** ([Services.tsx](frontend/components/Services.tsx)):
    - Animates accordion content panel heights smoothly from `0` to `auto` with GSAP, avoiding the jank and layout reflow delays of CSS max-height transitions.
+   
+   ![GSAP Services Accordion Demo](docs/services-accordion.gif)
+
 6. **Robust CMS Connectivity & Fallback** ([Project Page](frontend/app/project/[slug]/page.tsx)):
    - Requests projects from Strapi endpoints dynamically.
    - If the Strapi database is offline, it gracefully falls back to local high-fidelity mock data containing CGI abstract images.
+   
+   ![Dynamic Project Details Loader Demo](docs/project-detail-loader.gif)
 7. **Database Seeding** ([index.ts](backend/src/index.ts)):
    - Automatically populates the Strapi database with sample project collections on bootstrap if the database is detected as empty.
 
