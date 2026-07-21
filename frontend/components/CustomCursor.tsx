@@ -87,10 +87,11 @@ export default function CustomCursor() {
           !target.closest("h2") &&
           !target.closest("h3")
         ) {
+          const isButton = Boolean(target.closest("button"));
           gsap.to(cursor, {
             scale: 0.5, // 48px vector size (1.5x relative to default 32px)
-            borderColor: "#d4af37",
-            backgroundColor: "rgba(212, 175, 55, 0.1)",
+            borderColor: isButton ? "#ffffff" : "#d4af37",
+            backgroundColor: isButton ? "rgba(255, 255, 255, 0.2)" : "rgba(212, 175, 55, 0.1)",
             duration: 0.3,
           });
         }

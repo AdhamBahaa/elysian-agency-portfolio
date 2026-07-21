@@ -76,33 +76,43 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="w-full bg-card/40 border border-border/20 rounded-2xl p-6 md:p-10 backdrop-blur-md">
-      <h3 className="font-syne text-2xl font-bold uppercase tracking-tight mb-2">
-        Send Us a Message
-      </h3>
-      <p className="text-muted-foreground text-xs md:text-sm mb-8">
-        Have a new project, query, or strategic partnership in mind? Drop us a line.
-      </p>
+    <div className="relative w-full bg-gradient-to-b from-card/90 via-card/70 to-card/90 border border-primary/30 hover:border-primary/50 shadow-[0_0_50px_rgba(255,255,255,0.03)] rounded-3xl p-8 md:p-12 backdrop-blur-xl transition-all duration-300">
+      {/* Subtle Glowing Top Border Accent */}
+      <div className="absolute top-0 left-12 right-12 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+
+      {/* Header & Pill Badge */}
+      <div className="flex flex-col items-start mb-8">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary text-[11px] uppercase tracking-widest font-mono mb-4">
+          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+          Direct Inquiry Form
+        </div>
+        <h3 className="font-syne text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-foreground">
+          Send Us a Message
+        </h3>
+        <p className="text-muted-foreground text-sm font-medium mt-2 leading-relaxed">
+          Have a new project, RFP, or strategic partnership in mind? Fill in your details below.
+        </p>
+      </div>
 
       {isSuccess && (
-        <div className="mb-6 p-4 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-sm flex items-center gap-3">
-          <CheckCircle2 size={20} className="shrink-0 text-emerald-400" />
-          <span>Thank you! Your message has been sent successfully. We will get back to you shortly.</span>
+        <div className="mb-8 p-5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-sm flex items-center gap-3.5 shadow-lg">
+          <CheckCircle2 size={22} className="shrink-0 text-emerald-400" />
+          <span className="font-medium">Thank you! Your message has been sent successfully. We will get back to you shortly.</span>
         </div>
       )}
 
       {errorMessage && (
-        <div className="mb-6 p-4 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-sm flex items-center gap-3">
-          <AlertCircle size={20} className="shrink-0 text-rose-400" />
-          <span>{errorMessage}</span>
+        <div className="mb-8 p-5 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-200 text-sm flex items-center gap-3.5 shadow-lg">
+          <AlertCircle size={22} className="shrink-0 text-rose-400" />
+          <span className="font-medium">{errorMessage}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Name Field */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name" className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+          <div className="flex flex-col gap-2.5">
+            <label htmlFor="name" className="text-xs uppercase tracking-widest text-foreground/90 font-bold">
               Your Name <span className="text-primary">*</span>
             </label>
             <input
@@ -113,13 +123,13 @@ export default function ContactForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. Elena Rostova"
-              className="bg-background/60 border border-border/30 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors duration-200"
+              className="bg-background/90 border border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 shadow-inner"
             />
           </div>
 
           {/* Email Field */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+          <div className="flex flex-col gap-2.5">
+            <label htmlFor="email" className="text-xs uppercase tracking-widest text-foreground/90 font-bold">
               Your Email <span className="text-primary">*</span>
             </label>
             <input
@@ -130,14 +140,14 @@ export default function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               placeholder="elena@studio.com"
-              className="bg-background/60 border border-border/30 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors duration-200"
+              className="bg-background/90 border border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 shadow-inner"
             />
           </div>
         </div>
 
         {/* Subject Field */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="subject" className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+        <div className="flex flex-col gap-2.5">
+          <label htmlFor="subject" className="text-xs uppercase tracking-widest text-foreground/90 font-bold">
             Subject / Inquiry Type
           </label>
           <input
@@ -147,13 +157,13 @@ export default function ContactForm() {
             value={formData.subject}
             onChange={handleChange}
             placeholder="e.g. Brand Design & WebGL Inquiry"
-            className="bg-background/60 border border-border/30 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors duration-200"
+            className="bg-background/90 border border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 shadow-inner"
           />
         </div>
 
         {/* Message Field */}
-        <div className="flex flex-col gap-2">
-          <label htmlFor="message" className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+        <div className="flex flex-col gap-2.5">
+          <label htmlFor="message" className="text-xs uppercase tracking-widest text-foreground/90 font-bold">
             Message <span className="text-primary">*</span>
           </label>
           <textarea
@@ -164,27 +174,27 @@ export default function ContactForm() {
             value={formData.message}
             onChange={handleChange}
             placeholder="Tell us about your project scope, timeline, and goals..."
-            className="bg-background/60 border border-border/30 rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors duration-200 resize-none"
+            className="bg-background/90 border border-border/60 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground/60 transition-all duration-200 resize-none shadow-inner"
           />
         </div>
 
         {/* Submit Button */}
-        <div className="self-start mt-2">
+        <div className="mt-4">
           <Magnetic>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="group flex items-center gap-3 bg-primary text-primary-foreground font-syne text-xs uppercase tracking-widest font-bold px-8 py-4 rounded-full hover:opacity-90 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="w-full sm:w-auto group flex items-center justify-center gap-3 bg-primary text-primary-foreground font-syne text-xs uppercase tracking-widest font-extrabold px-10 py-4.5 rounded-full hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={16} className="animate-spin" />
+                  <Loader2 size={18} className="animate-spin" />
                   <span>Sending Message...</span>
                 </>
               ) : (
                 <>
                   <span>Send Message</span>
-                  <Send size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
+                  <Send size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
                 </>
               )}
             </button>
