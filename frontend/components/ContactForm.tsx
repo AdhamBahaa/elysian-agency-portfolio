@@ -48,7 +48,15 @@ export default function ContactForm() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to submit message. Please try again.");
+        const errorJson = await res.json().catch(() => ({}));
+        const detailedMsg =
+          errorJson?.error?.message ||
+          (res.status === 404
+            ? "Strapi API endpoint not found. Please restart the backend server."
+            : res.status === 403
+            ? "Permission denied by Strapi. Please restart the backend server."
+            : `Server returned error (${res.status}). Please try again.`);
+        throw new Error(detailedMsg);
       }
 
       setIsSuccess(true);
