@@ -122,6 +122,7 @@ export default {
           'api::service.service.findOne',
           'api::project.project.find',
           'api::project.project.findOne',
+          'api::contact.contact.create',
         ];
 
         const existingPerms = await strapi.db.query('plugin::users-permissions.permission').findMany({
