@@ -20,24 +20,32 @@ export default function HomeHeroClient() {
         duration: 0.6,
         ease: "power2.out",
       })
-      // Stagger reveal the main hero title words
-      .from(".hero-title-word", {
-        y: "100%",
-        opacity: 0,
-        stagger: 0.08,
-        duration: 1,
-        ease: "power4.out",
-      }, "-=0.3")
-      // Fade in the CTA and paragraph text
-      .from(".hero-fade-in", {
-        opacity: 0,
-        y: 20,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power3.out",
-      }, "-=0.4");
+        // Stagger reveal the main hero title words
+        .from(
+          ".hero-title-word",
+          {
+            y: "100%",
+            opacity: 0,
+            stagger: 0.08,
+            duration: 1,
+            ease: "power4.out",
+          },
+          "-=0.3",
+        )
+        // Fade in the CTA and paragraph text
+        .from(
+          ".hero-fade-in",
+          {
+            opacity: 0,
+            y: 20,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.4",
+        );
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
@@ -56,22 +64,31 @@ export default function HomeHeroClient() {
       {/* Large Typography display heading */}
       <h1 className="font-syne text-[8vw] md:text-[6.5vw] font-extrabold uppercase leading-[0.9] tracking-tighter mb-10 overflow-hidden">
         <div className="overflow-hidden block py-1">
-          <span className="hero-title-word inline-block select-none">Aesthetic</span>
+          <span className="hero-title-word inline-block select-none">
+            Aesthetic
+          </span>
         </div>
         <div className="overflow-hidden block py-1">
-          <span className="hero-title-word inline-block select-none text-primary italic font-serif lowercase">met with</span>
+          <span className="hero-title-word inline-block select-none text-primary italic font-serif lowercase">
+            met with
+          </span>
         </div>
         <div className="overflow-hidden block py-1">
-          <span className="hero-title-word inline-block select-none">Fluid Motion</span>
+          <span className="hero-title-word inline-block select-none">
+            Fluid Motion
+          </span>
         </div>
       </h1>
 
       {/* Subtext and CTAs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-4 max-w-4xl">
         <p className="hero-fade-in text-muted-foreground text-sm md:text-base leading-relaxed">
-          We design and build digital experiences that feel alive. By marrying clean Next.js structure, tailored Tailwind CSS tokens, and premium GSAP timelines, we create portfolios and commerce solutions that stand out.
+          We design and build digital experiences that feel alive. By marrying
+          clean Next.js structure, tailored Tailwind CSS tokens, and premium
+          GSAP timelines, we create portfolios and commerce solutions that stand
+          out.
         </p>
-        
+
         <div className="hero-fade-in flex flex-col sm:flex-row gap-6 md:justify-end items-start sm:items-center">
           <Magnetic>
             <Link
@@ -81,7 +98,7 @@ export default function HomeHeroClient() {
               Explore Works
             </Link>
           </Magnetic>
-          
+
           <Magnetic>
             <Link
               href="#contact"

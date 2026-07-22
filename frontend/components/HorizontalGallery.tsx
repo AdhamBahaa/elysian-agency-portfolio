@@ -274,16 +274,29 @@ export default function HorizontalGallery({
         open={selectedProject !== null}
         onOpenChange={(open) => !open && setSelectedProject(null)}
       >
-        <DialogContent className="max-w-2xl bg-card border border-border/20 text-foreground">
+        <DialogContent
+          className="max-w-2xl bg-card border border-border/20 text-foreground"
+          initialFocus={false}
+        >
           {selectedProject && (
             <>
               <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden mb-6 bg-muted border border-border/10">
-                <ProjectImage
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  fallbackSrc="/project_1.jpg"
-                  className="object-cover"
-                />
+                {(() => {
+                  const projectIdx = projects.findIndex(
+                    (p) => p.id === selectedProject.id
+                  );
+                  const fallback = `/project_${
+                    (projectIdx >= 0 ? projectIdx % 3 : 0) + 1
+                  }.jpg`;
+                  return (
+                    <ProjectImage
+                      src={selectedProject.image}
+                      alt={selectedProject.title}
+                      fallbackSrc={fallback}
+                      className="object-cover"
+                    />
+                  );
+                })()}
               </div>
               <DialogHeader>
                 <div className="flex justify-between items-start gap-4">

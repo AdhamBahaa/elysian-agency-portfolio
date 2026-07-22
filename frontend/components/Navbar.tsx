@@ -18,7 +18,10 @@ export default function Navbar() {
     { label: "Contact", href: "#contact" },
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
     if (href === "/") {
       if (lenis) {
         e.preventDefault();
@@ -41,7 +44,10 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center mix-blend-difference">
       {/* Brand Logo */}
-      <Link href="/" className="font-syne font-extrabold text-2xl tracking-widest text-foreground hover:scale-105 transition-transform duration-200">
+      <Link
+        href="/"
+        className="font-syne font-extrabold text-2xl tracking-widest text-foreground hover:scale-105 transition-transform duration-200"
+      >
         ELYSIAN.
       </Link>
 
@@ -63,10 +69,16 @@ export default function Navbar() {
       {/* Mobile Drawer Navigation (Shadcn Sheet) */}
       <div className="md:hidden">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger className="p-2 text-foreground hover:text-primary focus:outline-none cursor-pointer" aria-label="Toggle menu">
+          <SheetTrigger
+            className="p-2 text-foreground hover:text-primary focus:outline-none cursor-pointer"
+            aria-label="Toggle menu"
+          >
             <Menu size={24} />
           </SheetTrigger>
-          <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background border-l border-border/20 flex flex-col justify-between py-12 px-8">
+          <SheetContent
+            side="right"
+            className="w-[300px] sm:w-[400px] bg-background border-l border-border/20 flex flex-col justify-between py-12 px-8"
+          >
             <div className="flex flex-col gap-10 mt-12">
               <div className="text-xs uppercase tracking-widest text-muted-foreground border-b border-border/20 pb-4">
                 Navigation
@@ -88,7 +100,7 @@ export default function Navbar() {
                 ))}
               </nav>
             </div>
-            
+
             <div className="flex flex-col gap-4 text-xs tracking-widest text-muted-foreground border-t border-border/20 pt-6">
               <div>Based in Zurich, Switzerland</div>
               <div>hello@elysian.agency</div>
